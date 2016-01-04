@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans
+ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+ 
+
+<bean id="prodManager" class="com.lianmeng.core.prod.domain.ProdManager" >
+    <property name="prodManagerDAO" ref="prodManagerDAO" ></property>
+</bean>
+
+<bean id="versionManager" class="com.lianmeng.core.version.domain.VersionManager" >
+    <property name="versionManagerDAO" ref="versionManagerDAO" ></property>
+</bean>
+
+<bean id="homeManager" class="com.lianmeng.extend.lianmeng.home.domain.HomeManager" >
+    <property name="homeManagerDAO" ref="homeManagerDAO" ></property>
+</bean>
+
+<bean id="extProdManager" class="com.lianmeng.extend.lianmeng.extprod.domain.ExtProdManager" >
+    <property name="extProdManagerDAO" ref="extProdManagerDAO" ></property>
+</bean>
+
+<bean id="srvOrderManager" class="com.lianmeng.core.srv.domain.SrvOrderManager" >
+    <property name="srvOrderManagerDAO" ref="srvOrderManagerDAO" ></property>
+</bean>
+
+<bean id="userManager" class="com.lianmeng.core.user.domain.UserManager" >
+    <property name="userManagerDAO" ref="userManagerDAO" ></property>
+</bean>
+
+<bean id="payOrderManager" class="com.lianmeng.core.acco.domain.PayOrderManager" >
+    <property name="payOrderManagerDAO" ref="payOrderManagerDAO" ></property>
+</bean>
+
+<bean id="addressManager" class="com.lianmeng.core.addr.domain.AddressManager" >
+    <property name="addressManagerDAO" ref="addressManagerDAO" ></property>
+</bean>
+</beans>

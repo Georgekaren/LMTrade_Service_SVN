@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans
+ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+ 
+
+<bean id="prodManagerService" class="com.lianmeng.core.prod.service.ProdManagerService" >
+    <property name="prodManager" ref="prodManager" ></property>
+</bean>
+
+<bean id="versionManagerService" class="com.lianmeng.core.version.service.VersionManagerService" >
+    <property name="versionManager" ref="versionManager" ></property>
+</bean>
+
+<bean id="homeManagerService" class="com.lianmeng.extend.lianmeng.home.service.HomeManagerService" >
+    <property name="homeManager" ref="homeManager" ></property>
+</bean>
+
+<bean id="extProdManagerService" class="com.lianmeng.extend.lianmeng.extprod.service.ExtProdManagerService" >
+    <property name="extProdManager" ref="extProdManager" ></property>
+</bean>
+
+<bean id="srvOrderManagerService" class="com.lianmeng.core.srv.service.SrvOrderManagerService" >
+    <property name="srvOrderManager" ref="srvOrderManager" ></property>
+</bean>
+
+<bean id="userManagerService" class="com.lianmeng.core.user.service.UserManagerService" >
+    <property name="userManager" ref="userManager" ></property>
+</bean>
+
+<bean id="payOrderManagerService" class="com.lianmeng.core.acco.service.PayOrderManagerService" >
+    <property name="payOrderManager" ref="payOrderManager" ></property>
+</bean>
+
+<bean id="addressManagerService" class="com.lianmeng.core.addr.service.AddressManagerService" >
+    <property name="addressManager" ref="addressManager" ></property>
+</bean>
+
+
+</beans>
