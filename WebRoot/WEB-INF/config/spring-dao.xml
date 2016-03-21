@@ -2,7 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:schemaLocation="http://www.springframework.org/schema/beans
- http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
  
 
 <bean id="prodManagerDAO" class="com.lianmeng.core.prod.dao.mysql.ProdManagerDAOMysqlImpl"  parent="baseJdbcSupport">
@@ -23,5 +23,7 @@
 <bean id="payOrderManagerDAO" class="com.lianmeng.core.acco.dao.mysql.PayOrderManagerDAOMysqlImpl"  parent="baseJdbcSupport">
 </bean>
 <bean id="addressManagerDAO" class="com.lianmeng.core.addr.dao.mysql.AddressManagerDAOMysqlImpl"  parent="baseJdbcSupport">
+</bean>
+<bean id="discoverManagerDAO" class="com.lianmeng.extend.lianmeng.discover.dao.mysql.DiscoverManagerDAOMysqlImpl"  parent="baseJdbcSupport">
 </bean>
 </beans>
