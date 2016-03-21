@@ -107,9 +107,10 @@ public class UserManagerDAOMysqlImpl extends UserManagerDAO {
     public HashMap<String, String> qryUserInfo(AbstractUserManager user) throws AppException {
         ArrayList<String> array = new ArrayList<String>();
         StringBuffer sqlBuffer = new StringBuffer();
-        sqlBuffer.append(" select id userId,name usersession,10 bonus,'5' level,1 ordercount,1 favoritescount ");
-        sqlBuffer.append(" ,telephone,address,a.default_receive_addr_id from im_user a  ");
-        sqlBuffer.append("  where id= ? and del_state='0' ");
+        sqlBuffer.append(" select a.id,a.name,a.telephone,a.id userId,b.big_pic pic,a.name userName,a.name usersession,10 bonus,'5' level  ");
+        sqlBuffer.append(",1 ordercount,1 favoritescount ");
+        sqlBuffer.append(" ,telephone,address,a.default_receive_addr_id from im_user a left join im_picture b on  a.pic=b.id ");
+        sqlBuffer.append("  where a.id= ? and a.del_state='0'  ");
         array.add(user.getId());
         ArrayList<HashMap<String, String>> qResult = this.queryList(sqlBuffer.toString(), array);
         if (qResult.size() > 0) {

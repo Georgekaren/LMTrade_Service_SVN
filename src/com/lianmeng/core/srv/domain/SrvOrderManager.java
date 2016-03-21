@@ -8,8 +8,11 @@ package com.lianmeng.core.srv.domain;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.commons.lang.math.RandomUtils;
 import org.apache.log4j.Logger;
 
+import com.lianmeng.core.framework.bo.utils.DateUtilBase;
+import com.lianmeng.core.framework.bo.utils.StringUtil;
 import com.lianmeng.core.framework.exceptions.AppException;
 import com.lianmeng.core.srv.dao.SrvOrderManagerDAO;
 
@@ -42,9 +45,12 @@ public class SrvOrderManager extends AbstractSrvOrderManager {
 
     @Override
     public int add() throws AppException {
+        this.setOrderCode(DateUtilBase.getNameFileCurrentDate().replace("_", "") + RandomUtils.nextInt(10000));
+        
         for (int i = 0; i < this.getProdIds().size(); i++) {
             this.setOrderId(String.valueOf(this.srvOrderManagerDAO.getSeq("SEQ_SRV_ORDER_ID")));
-            this.setOrderCode("0");
+            
+           // this.setOrderCode("0");
             this.setProdId(this.getProdIds().get(i));
             this.srvOrderManagerDAO.insert(this);
         }
@@ -117,11 +123,11 @@ public class SrvOrderManager extends AbstractSrvOrderManager {
         double totalPoint = 0;
         for (int i = 0; i < orderList.size(); i++) {
             HashMap<String, String> orderMap = orderList.get(i);
-            totalPrice = totalPrice + Double.valueOf(orderMap.get("subtotal"));
+            totalPrice = totalPrice + Double.valueOf(orderMap.get("price"));
             totalPoint = totalPoint + Double.valueOf(orderMap.get("grade"));
             totalCount = totalCount + Double.valueOf(orderMap.get("prodNum"));
         }
-        cart_addup.put("total_count", String.valueOf(totalCount));
+        cart_addup.put("total_count", String.valueOf(orderList.size()));
         cart_addup.put("total_price", String.valueOf(totalPrice));
         cart_addup.put("total_point", String.valueOf(totalPoint));
         cart_addup.put("freight", "0");  //运费 暂不处理
@@ -131,14 +137,22 @@ public class SrvOrderManager extends AbstractSrvOrderManager {
         logger.info("cart_addup");
         
         HashMap<String, String> address_info = new HashMap<String, String>();
-        if (orderList.get(0).get("addr_id") != null && !"".equals(orderList.get(0).get("addr_id"))) {
+        
+        if (!StringUtil.isEmpty(this.getUserId())) {
+            address_info = this.srvOrderManagerDAO.qryDefaultAddressByUserId(this.getUserId());
+        }
+        else if (orderList.size() > 0 && orderList.get(0) != null && orderList.get(0).get("addr_id") != null
+            && !"".equals(orderList.get(0).get("addr_id"))) {
             address_info = this.srvOrderManagerDAO.qryAddressListById(String.valueOf(orderList.get(0).get("addr_id")));
         }
-        else if (orderList.get(0).get("addr_id") != null && !"".equals(orderList.get(0).get("addr_id"))) {
+        
+        if (address_info == null) {
+            address_info = new HashMap<String, String>();
             address_info.put("id", "0");
-            address_info.put("name", "缺");
-            address_info.put("areadetail", "缺");
-            address_info.put("address_detail", "缺");
+            address_info.put("name", "请选择收件人");
+            address_info.put("areadetail", "请选择收件人");
+            address_info.put("phonenumber", " ");
+            address_info.put("address_detail", "请选择收件人");
         }
         cartMap.put("address_info", address_info);
 
@@ -166,5 +180,11 @@ public class SrvOrderManager extends AbstractSrvOrderManager {
         cartMap.put("order_info", ords);
         
         return cartMap;
+    }
+    
+    @Override
+    public int modifyStateByOrderNo() throws AppException {
+        this.srvOrderManagerDAO.updateStateByOrderNo(this);
+        return 0;
     }
 }

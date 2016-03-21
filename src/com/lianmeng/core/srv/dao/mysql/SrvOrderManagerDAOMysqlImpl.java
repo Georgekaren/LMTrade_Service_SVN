@@ -30,12 +30,13 @@ public class SrvOrderManagerDAOMysqlImpl extends SrvOrderManagerDAO {
         ArrayList<String> array = new ArrayList<String>();
         StringBuffer sBuffer = new StringBuffer();
         sBuffer.append(" insert into Srv_order(id,code,state,prod_id,user_id,apply_date,prod_num,total_price,isgift,del_state,create_date) ");
-        sBuffer.append(" values(?,?,'1003001',?,'1',now(),?,?,?,'0',now()) ");
+        sBuffer.append(" values(?,?,'1003001',?,?,now(),?,?,?,'0',now()) ");
         array.add(paramT.getOrderId());
         array.add(paramT.getOrderCode());
         array.add(paramT.getProdId());
+        array.add(paramT.getUserId());
         array.add(paramT.getProdNum());
-        array.add(paramT.getProdNum());
+        array.add(paramT.getTotalPrice());
         array.add(paramT.getIsgift());
         this.update(sBuffer.toString(), array);
     }
@@ -128,6 +129,19 @@ public class SrvOrderManagerDAOMysqlImpl extends SrvOrderManagerDAO {
         sbf.append(" from Srv_order a,srv_prod b,im_picture c where a.del_state='0' and a.user_id= ? ");
         sbf.append(" and a.prod_id=b.id and b.pic_id=c.id ");
         array.add(order.getUserId());
+        if (order.getState() != null && "0".equals(order.getState())) {
+            // 1个月内
+            sbf.append(" and date_format(a.create_date,'%Y%m') = date_format(curdate() , '%Y%m') ");
+        }
+        else if (order.getState() != null && "1".equals(order.getState())) {
+            // 待收货
+            sbf.append(" and a.state in(1003003,1003004,1003005) ");
+        }
+        else if (order.getState() != null && "2".equals(order.getState())) {
+            // 待支付
+            sbf.append(" and a.state in(1003001,1003002)");
+        }
+        
         return this.queryList(sbf.toString(), array);
     }
     
@@ -140,6 +154,41 @@ public class SrvOrderManagerDAOMysqlImpl extends SrvOrderManagerDAO {
         sbf.append("  from Im_address a where id= ? "); //and a.del_state='0' 
         array.add(addressId);
         return this.queryList(sbf.toString(), array).get(0);
+    }
+    
+    @Override
+    public HashMap<String, String> qryDefaultAddressByUserId(String userId) throws AppException {
+        ArrayList<String> array = new ArrayList<String>();
+        StringBuffer sbf = new StringBuffer();
+        sbf.append(" select id,name,a.tele_no phonenumber,a.fixed_tele_no fixedtel,a.is_default isdefault,a.province_id provinceid ");
+        sbf.append(" ,a.city_id cityid,a.area_id areaid,a.area_id address_area,a.detail areadetail,a.detail address_detail,a.zipcode ");
+        sbf.append("  from Im_address a where user_id= ? and del_state='0' limit 1 "); //and a.del_state='0' 
+        array.add(userId);
+        ArrayList<HashMap<String, String>> rtnList = this.queryList(sbf.toString(), array);
+        if (rtnList.size() > 0) {
+            return rtnList.get(0);
+        }
+        else {
+            return null;
+        }
+        
+    }
+
+    @Override
+    public int updateStateByOrderNo(AbstractSrvOrderManager paramT) throws AppException {
+        ArrayList<String> array = new ArrayList<String>();
+        StringBuffer sBuffer = new StringBuffer();
+        sBuffer.append(" update Srv_order a set a.modify_user= ? ,a.modify_date= now() ");
+        array.add(paramT.getUserId());
+        if (paramT.getInputstate() != null && !"".equals(paramT.getInputstate())) {
+            sBuffer.append(" ,a.state= ? ");
+            array.add(paramT.getInputstate());
+        }
+        
+        sBuffer.append(" where   a.code= ? and del_state='0'  ");
+        array.add(paramT.getOrderCode());
+        return this.update(sBuffer.toString(), array);
+        
     }
 
 }

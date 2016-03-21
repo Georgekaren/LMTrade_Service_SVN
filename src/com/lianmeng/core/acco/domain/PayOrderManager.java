@@ -8,11 +8,9 @@ package com.lianmeng.core.acco.domain;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.apache.commons.lang.math.RandomUtils;
 import org.apache.log4j.Logger;
 
 import com.lianmeng.core.acco.dao.PayOrderManagerDAO;
-import com.lianmeng.core.framework.bo.utils.DateUtilBase;
 import com.lianmeng.core.framework.exceptions.AppException;
 
 
@@ -69,11 +67,12 @@ public class PayOrderManager extends AbstractPayOrderManager {
     
     @Override
     public int payOrder() throws AppException {
-        this.setOrderNo(DateUtilBase.getNameFileCurrentDate().replace("_", "") + RandomUtils.nextInt(10000));
-        for (int i = 0; i < this.getProdIds().size(); i++) {
+       // this.setOrderNo(DateUtilBase.getNameFileCurrentDate().replace("_", "") + RandomUtils.nextInt(10000));
+        this.payOrderManagerDAO.payOrder(this);
+       /* for (int i = 0; i < this.getProdIds().size(); i++) {
             this.setProdId(this.getProdIds().get(i));
             this.payOrderManagerDAO.payOrder(this);
-        }
+        }*/
         return 0;
     }
     

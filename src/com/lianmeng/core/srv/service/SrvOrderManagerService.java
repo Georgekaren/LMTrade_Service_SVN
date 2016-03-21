@@ -43,6 +43,7 @@ public class SrvOrderManagerService implements IAction {
 
             this.srvOrderManager.dictToBO(aDict);
             this.srvOrderManager.add();
+            aDict.set("DATA_INFO", this.srvOrderManager.getOrderCode());
         }
         else if (StringUtils.equals(action, "REMOVEORDER")) {
 
@@ -101,6 +102,13 @@ public class SrvOrderManagerService implements IAction {
             aDict.set("productlist", ordMap.get("productlist"));
             aDict.set("checkout_prom", ordMap.get("cart_prom"));
             aDict.set("checkout_addup", ordMap.get("cart_addup"));
+            
+        }
+        else if (StringUtils.equals(action, "MODIFYSTATEANDQRYHASORDER")) {
+
+            this.srvOrderManager.dictToBO(aDict);
+            this.srvOrderManager.modifyStateByOrderNo();
+            aDict.set("DATA_INFO", this.srvOrderManager.qryHasOrderList());
             
         }
         aDict.set(ServiceObjectToJsonUtil.RESPONSE_CODE, "success");

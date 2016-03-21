@@ -45,6 +45,9 @@ public class UserManagerService implements IAction {
         else if (StringUtils.equals(action, "ADDUSER")) {
             this.userManager.dictToBO(aDict);
             this.userManager.add();
+            HashMap<String, String> hMap = this.userManager.qryUserInfo();
+            aDict.set("DATA_INFO", hMap);
+            aDict.set("USER_INFO", hMap);
         }
         else if (StringUtils.equals(action, "DELUSER")) {
             this.userManager.dictToBO(aDict);

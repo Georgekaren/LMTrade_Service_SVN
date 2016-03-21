@@ -68,9 +68,9 @@ public class PayOrderManagerDAOMysqlImpl extends PayOrderManagerDAO {
     public int payOrder(AbstractPayOrderManager prod) throws AppException {
         ArrayList<String> array = new ArrayList<String>();
         StringBuffer sBuffer = new StringBuffer();
-        sBuffer.append("update Srv_order a set a.code= ?,a.state= ?,a.modify_user=?,a.pay_method= ? , a.logistic_id= ? ,a.modify_date=NOW() ");
-        sBuffer.append(" where user_id= ? and prod_id= ? and del_state='0' ");
-        array.add(prod.getOrderNo());
+        sBuffer.append("update Srv_order a set  a.state= ?,a.modify_user=?,a.pay_method= ? , a.logistic_id= ? ,a.modify_date=NOW() ");
+        sBuffer.append(" where user_id= ?  and a.code= ? and del_state='0' ");
+        
         array.add(prod.getState());
         array.add(prod.getUserId());
         if ("alipay".equals(prod.getChannel())) {
@@ -87,7 +87,7 @@ public class PayOrderManagerDAOMysqlImpl extends PayOrderManagerDAO {
         }
         array.add("1006001"); //默认商家送
         array.add(prod.getUserId());
-        array.add(prod.getProdId());
+        array.add(prod.getOrderNo());
         return this.update(sBuffer.toString(), array);
     }
     

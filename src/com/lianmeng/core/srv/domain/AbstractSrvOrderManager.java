@@ -59,6 +59,18 @@ public abstract class AbstractSrvOrderManager {
     private String state;
     
     /**
+     * inputstate 更新状态时使用<br>
+     */
+    private String inputstate;
+    
+    public String getInputstate() {
+        return inputstate;
+    }
+
+    public void setInputstate(String inputstate) {
+        this.inputstate = inputstate;
+    }
+    /**
      * prodIds <br>
      */
     private ArrayList<String> prodIds;
@@ -168,6 +180,9 @@ public abstract class AbstractSrvOrderManager {
         if (aDict.get("state") != null && !"".equals(aDict.get("state"))) {
             this.setState((String) aDict.getValueByName("state"));
         }
+        if (aDict.get("inputstate") != null && !"".equals(aDict.get("inputstate"))) {
+            this.setInputstate((String) aDict.getValueByName("inputstate"));
+        }
 
         if (aDict.get("isgift") != null && !"".equals(aDict.get("isgift"))) {
             this.setIsgift("1");
@@ -248,4 +263,13 @@ public abstract class AbstractSrvOrderManager {
      * @throws AppException <br>
      */ 
     public abstract HashMap<String, Object> qryHasPayOrderDetailList() throws AppException;
+    /**
+     * Description: <br> 
+     *  
+     * @author XXX<br>
+     * @taskId <br>
+     * @return 0
+     * @throws AppException <br>
+     */ 
+    public abstract int modifyStateByOrderNo() throws AppException;
 }

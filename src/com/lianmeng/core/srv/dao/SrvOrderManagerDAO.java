@@ -67,6 +67,26 @@ public abstract class SrvOrderManagerDAO extends BaseJdbcDAO<AbstractSrvOrderMan
      * @throws AppException <br>
      */ 
     public abstract HashMap<String, String> qryAddressListById(String addressId) throws AppException;
-
+    /**
+     * Description: 通过用户Id查询地址信息<br> 
+     *  
+     * @author XXX<br>
+     * @taskId <br>
+     * @param userId String
+     * @return ArrayList<HashMap<String, String>>
+     * @throws AppException <br>
+     */ 
+    public abstract HashMap<String, String> qryDefaultAddressByUserId(String userId) throws AppException;
+    
+    /**
+     * Description: <br>
+     * 
+     * @author XXX<br>
+     * @taskId <br>
+     * @param order AbstractSrvOrderManager 
+     * @return 0
+     * @throws AppException <br>
+     */
+    public abstract int updateStateByOrderNo(AbstractSrvOrderManager order) throws AppException;
     
 }
